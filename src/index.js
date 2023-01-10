@@ -37,8 +37,6 @@ const diff = (filepath1, filepath2) => {
     }
   }
 
-  console.log(`{\n${result}}`);
-
   return `{\n${result}}`;
 };
 
