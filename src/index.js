@@ -5,14 +5,16 @@ import _ from 'lodash';
 const getExtension = (filepath) => {
   const parts = filepath.split('.');
   return parts[parts.length - 1];
-}
+};
 
 const parse = (filepath) => {
+  let result;
   const extension = getExtension(filepath);
   const readFile = fs.readFileSync(path.resolve(filepath));
   if (extension === 'json') {
-    return JSON.parse(readFile);
+    result = JSON.parse(readFile);
   }
+  return result;
 };
 
 const diff = (filepath1, filepath2) => {
