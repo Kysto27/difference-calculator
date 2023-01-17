@@ -11,7 +11,7 @@ const getExtension = (filepath) => {
 const parse = (filepath) => {
   let result;
   const extension = getExtension(filepath);
-  const readFile = fs.readFileSync(path.resolve(filepath));
+  const readFile = fs.readFileSync(path.resolve(process.cwd(), filepath).trim());
   if (extension === 'json') {
     result = JSON.parse(readFile);
   }
