@@ -16,3 +16,11 @@ test('plain JSON', () => {
   const expected = readFile('output.txt');
   expect(actual).toEqual(expected);
 });
+
+test('plain YML', () => {
+  const file1Path = getFixturePath('file1.yml');
+  const file2Path = getFixturePath('file2.yaml');
+  const actual = diff(file1Path, file2Path);
+  const expected = readFile('output.txt');
+  expect(actual).toEqual(expected);
+});

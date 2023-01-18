@@ -1,22 +1,6 @@
-/* eslint-disable no-restricted-syntax */
-import fs from 'fs';
-import path from 'path';
+ /* eslint-disable no-restricted-syntax */
 import _ from 'lodash';
-
-const getExtension = (filepath) => {
-  const parts = filepath.split('.');
-  return parts[parts.length - 1];
-};
-
-const parse = (filepath) => {
-  let result;
-  const extension = getExtension(filepath);
-  const readFile = fs.readFileSync(path.resolve(process.cwd(), filepath).trim());
-  if (extension === 'json') {
-    result = JSON.parse(readFile);
-  }
-  return result;
-};
+import parse from './parsers.js';
 
 const diff = (filepath1, filepath2) => {
   const obj1 = parse(filepath1);
