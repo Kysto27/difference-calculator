@@ -1,4 +1,4 @@
- /* eslint-disable no-restricted-syntax */
+/* eslint-disable no-restricted-syntax */
 import _ from 'lodash';
 import parse from './parsers.js';
 
