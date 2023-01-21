@@ -29,7 +29,7 @@ const diff = (filepath1, filepath2) => {
       result += `    ${key}: ${obj1[key]}\n`;
     }
   }
-
+  console.log(`{\n${result}}`);
   return `{\n${result}}`;
 };
 
