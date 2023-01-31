@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { load } from 'js-yaml';
 
 const parse = (data, extension) => {

@@ -11,3 +11,7 @@
 ### Поиск различий между двумя плоскими (только пары ключ-значение) YAML-файлами.
 
 [![asciicast](https://asciinema.org/a/Jrsieppqpx1ClHdTqIxgh4gav.svg)](https://asciinema.org/a/Jrsieppqpx1ClHdTqIxgh4gav)
+
+### Поиск различий между двумя файлами вложенной структурой.
+
+[![asciicast](https://asciinema.org/a/Q72XIWZPxnehr9APDcCScGybv.svg)](https://asciinema.org/a/Q72XIWZPxnehr9APDcCScGybv)
