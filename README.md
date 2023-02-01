@@ -15,3 +15,8 @@
 ### Поиск различий между двумя файлами вложенной структурой.
 
 [![asciicast](https://asciinema.org/a/Q72XIWZPxnehr9APDcCScGybv.svg)](https://asciinema.org/a/Q72XIWZPxnehr9APDcCScGybv)
+
+
+### Вывод различий между двумя файлами с вложенной структурой в древовидном и плоском форматах.
+
+[![asciicast](https://asciinema.org/a/WySmbnpJxTKDky0Otycu2n4Me.svg)](https://asciinema.org/a/WySmbnpJxTKDky0Otycu2n4Me)

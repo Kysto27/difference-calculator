@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 const makeIndent = (depth, replacer = ' ', spacesCount = 4) => replacer.repeat(depth * spacesCount - 2);
 
-const valueFormate = (data, formatStylish, depth = 1) => {
+const getValue = (data, formatStylish, depth = 1) => {
   if (!_.isObject(data)) {
     return data;
   }
@@ -14,33 +14,33 @@ const valueFormate = (data, formatStylish, depth = 1) => {
   return `{\n${result.join('\n')}\n  ${makeIndent(depth)}}`;
 };
 
-const stylish = (diffTree, depth = 0) => {
+const makeStylishOutput = (diffTree, depth = 0) => {
   const {
     type, name, children, value, value1, value2,
   } = diffTree;
   switch (type) {
     case 'tree': {
-      const result = children.map((child) => stylish(child, depth + 1));
+      const result = children.map((child) => makeStylishOutput(child, depth + 1));
       return `{\n${result.join('\n')}\n}`;
     }
     case 'nested': {
-      const result = children.map((child) => stylish(child, depth + 1));
+      const result = children.map((child) => makeStylishOutput(child, depth + 1));
       return `${makeIndent(depth)}  ${name}: {\n${result.join('\n')}\n${makeIndent(depth)}  }`;
     }
     case 'added':
-      return `${makeIndent(depth)}+ ${name}: ${valueFormate(value, stylish, depth)}`;
+      return `${makeIndent(depth)}+ ${name}: ${getValue(value, makeStylishOutput, depth)}`;
     case 'deleted':
-      return `${makeIndent(depth)}- ${name}: ${valueFormate(value, stylish, depth)}`;
+      return `${makeIndent(depth)}- ${name}: ${getValue(value, makeStylishOutput, depth)}`;
     case 'unchanged':
-      return `${makeIndent(depth)}  ${name}: ${valueFormate(value, stylish, depth)}`;
+      return `${makeIndent(depth)}  ${name}: ${getValue(value, makeStylishOutput, depth)}`;
     case 'changed': {
-      const deleted = `${makeIndent(depth)}- ${name}: ${valueFormate(value1, stylish, depth)}`;
-      const added = `${makeIndent(depth)}+ ${name}: ${valueFormate(value2, stylish, depth)}`;
+      const deleted = `${makeIndent(depth)}- ${name}: ${getValue(value1, makeStylishOutput, depth)}`;
+      const added = `${makeIndent(depth)}+ ${name}: ${getValue(value2, makeStylishOutput, depth)}`;
       return `${deleted}\n${added}`;
     }
     default:
-      throw new Error(`Type: ${type} is undefined`);
+      throw new Error(`Unknown type: ${type}!`);
   }
 };
 
-export default stylish;
+export default makeStylishOutput;
