@@ -9,50 +9,33 @@ const __dirname = dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
-test('JSON stylishOutput', () => {
-  const file1Path = getFixturePath('file1.json');
-  const file2Path = getFixturePath('file2.json');
-  const actual = genDiff(file1Path, file2Path, 'stylish');
-  const expected = readFile('stylishOutput.txt');
-  expect(actual).toEqual(expected);
-});
+const result = [
+  {
+    file1: 'file1.json', file2: 'file2.json', formatter: 'plain', expected: 'plainOutput.txt',
+  },
+  {
+    file1: 'file1.json', file2: 'file2.json', formatter: 'stylish', expected: 'stylishOutput.txt',
+  },
+  {
+    file1: 'file1.json', file2: 'file2.json', formatter: 'json', expected: 'jsonOutput.json',
+  },
+  {
+    file1: 'file1.yml', file2: 'file2.yaml', formatter: 'plain', expected: 'plainOutput.txt',
+  },
+  {
+    file1: 'file1.yml', file2: 'file2.yaml', formatter: 'stylish', expected: 'stylishOutput.txt',
+  },
+  {
+    file1: 'file1.yml', file2: 'file2.yaml', formatter: 'json', expected: 'jsonOutput.json',
+  },
+];
 
-test('JSON plainOutput', () => {
-  const file1Path = getFixturePath('file1.json');
-  const file2Path = getFixturePath('file2.json');
-  const actual = genDiff(file1Path, file2Path, 'plain');
-  const expected = readFile('plainOutput.txt');
-  expect(actual).toEqual(expected);
-});
-
-test('JSON jsonOutput', () => {
-  const file1Path = getFixturePath('file1.json');
-  const file2Path = getFixturePath('file2.json');
-  const actual = genDiff(file1Path, file2Path, 'json');
-  const expected = readFile('jsonOutput.json');
-  expect(actual).toEqual(expected);
-});
-
-test('YML stylishOutput', () => {
-  const file1Path = getFixturePath('file1.yml');
-  const file2Path = getFixturePath('file2.yaml');
-  const actual = genDiff(file1Path, file2Path, 'stylish');
-  const expected = readFile('stylishOutput.txt');
-  expect(actual).toEqual(expected);
-});
-
-test('YML plainOutput', () => {
-  const file1Path = getFixturePath('file1.yml');
-  const file2Path = getFixturePath('file2.yaml');
-  const actual = genDiff(file1Path, file2Path, 'stylish');
-  const expected = readFile('stylishOutput.txt');
-  expect(actual).toEqual(expected);
-});
-
-test('YML jsonOutput', () => {
-  const file1Path = getFixturePath('file1.yml');
-  const file2Path = getFixturePath('file2.yaml');
-  const actual = genDiff(file1Path, file2Path, 'json');
-  const expected = readFile('jsonOutput.json');
-  expect(actual).toEqual(expected);
+test.each(result)('plain, output and json formatter', ({
+  file1, file2, formatter, expected,
+}) => {
+  const file1Path = getFixturePath(file1);
+  const file2Path = getFixturePath(file2);
+  const actual = genDiff(file1Path, file2Path, formatter);
+  const expectedResult = readFile(expected);
+  expect(actual).toEqual(expectedResult);
 });
