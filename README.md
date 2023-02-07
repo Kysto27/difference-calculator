@@ -1,8 +1,21 @@
 # Difference calculator
 
+
 [![Actions Status](https://github.com/Kysto27/frontend-project-46/workflows/hexlet-check/badge.svg)](https://github.com/Kysto27/frontend-project-46/actions)
 [![Maintainability](https://api.codeclimate.com/v1/badges/a61321e279fe5201cffa/maintainability)](https://codeclimate.com/github/Kysto27/frontend-project-46/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/a61321e279fe5201cffa/test_coverage)](href="https://codeclimate.com/github/Kysto27/frontend-project-46/test_coverage)
+
+## Минимальные требования
+
+Node.js версии 13.2.0 и выше
+
+## Инструкция по установке
+```
+make install
+```
+```
+npm link
+```
 
 ### Поиск различий между двумя плоскими (только пары ключ-значение) JSON-файлами.
 
