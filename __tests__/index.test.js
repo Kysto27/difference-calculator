@@ -25,6 +25,14 @@ test('JSON plainOutput', () => {
   expect(actual).toEqual(expected);
 });
 
+test('JSON jsonOutput', () => {
+  const file1Path = getFixturePath('file1.json');
+  const file2Path = getFixturePath('file2.json');
+  const actual = genDiff(file1Path, file2Path, 'json');
+  const expected = readFile('jsonOutput.json');
+  expect(actual).toEqual(expected);
+});
+
 test('YML stylishOutput', () => {
   const file1Path = getFixturePath('file1.yml');
   const file2Path = getFixturePath('file2.yaml');
@@ -38,5 +46,13 @@ test('YML plainOutput', () => {
   const file2Path = getFixturePath('file2.yaml');
   const actual = genDiff(file1Path, file2Path, 'stylish');
   const expected = readFile('stylishOutput.txt');
+  expect(actual).toEqual(expected);
+});
+
+test('YML jsonOutput', () => {
+  const file1Path = getFixturePath('file1.yml');
+  const file2Path = getFixturePath('file2.yaml');
+  const actual = genDiff(file1Path, file2Path, 'json');
+  const expected = readFile('jsonOutput.json');
   expect(actual).toEqual(expected);
 });

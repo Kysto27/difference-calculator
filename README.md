@@ -20,3 +20,7 @@
 ### Вывод различий между двумя файлами с вложенной структурой в древовидном и плоском форматах.
 
 [![asciicast](https://asciinema.org/a/WySmbnpJxTKDky0Otycu2n4Me.svg)](https://asciinema.org/a/WySmbnpJxTKDky0Otycu2n4Me)
+
+### Вывод различий между двумя файлами с вложенной структурой в формате JSON.
+
+[![asciicast](https://asciinema.org/a/S8cIGy7PvGBr1vfJDDEpYwGlE.svg)](https://asciinema.org/a/S8cIGy7PvGBr1vfJDDEpYwGlE)

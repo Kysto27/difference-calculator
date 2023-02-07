@@ -9,6 +9,9 @@ const makeOutput = (data, formatName) => {
     case 'plain': {
       return makePlainOutput(data);
     }
+    case 'json': {
+      return JSON.stringify(data);
+    }
     default:
       throw new Error(`Unknown formatName: ${formatName}!`);
   }
