@@ -10,5 +10,8 @@ program
   .option('-f, --format <type>', 'output format', 'stylish', 'plain', 'json')
   .action((filepath1, filepath2) => {
     console.log(genDiff(filepath1, filepath2, program.opts().format));
-  })
-  .parse(process.argv);
+  });
+
+// .parse(process.argv);
+
+program.parse();
