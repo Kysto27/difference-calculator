@@ -3,15 +3,12 @@ import makePlainOutput from './plain.js';
 
 const makeOutput = (data, formatName) => {
   switch (formatName) {
-    case 'stylish': {
+    case 'stylish':
       return makeStylishOutput(data);
-    }
-    case 'plain': {
+    case 'plain':
       return makePlainOutput(data);
-    }
-    case 'json': {
+    case 'json':
       return JSON.stringify(data);
-    }
     default:
       throw new Error(`Unknown format: ${formatName}`);
   }
