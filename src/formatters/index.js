@@ -13,7 +13,7 @@ const makeOutput = (data, formatName) => {
       return JSON.stringify(data);
     }
     default:
-      throw new Error(`Unknown formatName: ${formatName}!`);
+      throw new Error(`Unknown formatName: '${formatName}'!`);
   }
 };
 
