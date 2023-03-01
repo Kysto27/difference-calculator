@@ -3,39 +3,25 @@ import path, { dirname } from 'path';
 import fs from 'fs';
 import genDiff from '../src/index.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+describe('gendiff', () => {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
 
-const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
-const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
+  const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
+  const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
-const result = [
-  {
-    file1: 'file1.json', file2: 'file2.json', formatter: 'plain', expected: 'plainOutput.txt',
-  },
-  {
-    file1: 'file1.json', file2: 'file2.json', formatter: 'stylish', expected: 'stylishOutput.txt',
-  },
-  {
-    file1: 'file1.json', file2: 'file2.json', formatter: 'json', expected: 'jsonOutput.json',
-  },
-  {
-    file1: 'file1.yml', file2: 'file2.yaml', formatter: 'plain', expected: 'plainOutput.txt',
-  },
-  {
-    file1: 'file1.yml', file2: 'file2.yaml', formatter: 'stylish', expected: 'stylishOutput.txt',
-  },
-  {
-    file1: 'file1.yml', file2: 'file2.yaml', formatter: 'json', expected: 'jsonOutput.json',
-  },
-];
+  const expectedStylish = readFile('stylishOutput.txt');
+  const expectedPlain = readFile('plainOutput.txt');
+  const expectedJson = readFile('jsonOutput.json');
 
-test.each(result)('plain, output and json formatter', ({
-  file1, file2, formatter, expected,
-}) => {
-  const file1Path = getFixturePath(file1);
-  const file2Path = getFixturePath(file2);
-  const actual = genDiff(file1Path, file2Path, formatter);
-  const expectedResult = readFile(expected);
-  expect(actual).toEqual(expectedResult);
+  const formats = ['json', 'yml'];
+
+  test.each(formats)('formats', (format) => {
+    const filepath1 = getFixturePath(`file1.${format}`);
+    const filepath2 = getFixturePath(`file2.${format}`);
+    expect(genDiff(filepath1, filepath2)).toBe(expectedStylish);
+    expect(genDiff(filepath1, filepath2, 'stylish')).toBe(expectedStylish);
+    expect(genDiff(filepath1, filepath2, 'plain')).toBe(expectedPlain);
+    expect(genDiff(filepath1, filepath2, 'json')).toBe(expectedJson);
+  });
 });

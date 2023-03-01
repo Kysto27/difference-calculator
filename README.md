@@ -17,6 +17,12 @@ make install
 npm link
 ```
 
+## Пример вызова
+
+```
+gendiff -f stylish __fixtures__/file1.yml __fixtures__/file2.yaml
+```
+
 ### Поиск различий между двумя плоскими (только пары ключ-значение) JSON-файлами.
 
 [![asciicast](https://asciinema.org/a/aUbIf2Q29uAFm5F6zcTZmHkUq.svg)](https://asciinema.org/a/aUbIf2Q29uAFm5F6zcTZmHkUq)
