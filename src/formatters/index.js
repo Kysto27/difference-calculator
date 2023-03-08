@@ -1,7 +1,7 @@
 import makeStylishOutput from './stylish.js';
 import makePlainOutput from './plain.js';
 
-const makeOutput = (data, formatName) => {
+const format = (data, formatName) => {
   switch (formatName) {
     case 'stylish':
       return makeStylishOutput(data);
@@ -14,4 +14,4 @@ const makeOutput = (data, formatName) => {
   }
 };
 
-export default makeOutput;
+export default format;

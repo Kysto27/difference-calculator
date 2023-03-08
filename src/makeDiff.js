@@ -1,6 +1,3 @@
-/* eslint-disable consistent-return */
-/* eslint-disable array-callback-return */
-/* eslint-disable no-restricted-syntax */
 import _ from 'lodash';
 
 const findDiff = (obj1, obj2) => {
@@ -15,20 +12,6 @@ const findDiff = (obj1, obj2) => {
         name: key,
         children: findDiff(obj1[key], obj2[key]),
         type: 'nested',
-      };
-    }
-    if (!Object.hasOwn(obj1, key)) {
-      return {
-        name: key,
-        value: obj2[key],
-        type: 'added',
-      };
-    }
-    if (!Object.hasOwn(obj2, key)) {
-      return {
-        name: key,
-        value: obj1[key],
-        type: 'deleted',
       };
     }
     if (Object.hasOwn(obj1, key) && Object.hasOwn(obj2, key)) {
@@ -46,6 +29,18 @@ const findDiff = (obj1, obj2) => {
         type: 'unchanged',
       };
     }
+    if (!Object.hasOwn(obj1, key)) {
+      return {
+        name: key,
+        value: obj2[key],
+        type: 'added',
+      };
+    }
+    return {
+      name: key,
+      value: obj1[key],
+      type: 'deleted',
+    };
   });
 
   return result;
