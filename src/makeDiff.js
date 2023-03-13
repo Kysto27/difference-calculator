@@ -1,51 +1,52 @@
 import _ from 'lodash';
 
-const findDiff = (obj1, obj2) => {
-  const keys1 = Object.keys(obj1);
-  const keys2 = Object.keys(obj2);
-  const keys = _.union(keys1, keys2);
+const findDiff = (data1, data2) => {
+  const keys = _.union(Object.keys(data1), Object.keys(data2));
   const sortedKeys = _.sortBy(keys);
 
-  const result = sortedKeys.map((key) => {
-    if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
+  return sortedKeys.map((key) => {
+    if (!Object.hasOwn(data1, key)) {
       return {
-        name: key,
-        children: findDiff(obj1[key], obj2[key]),
-        type: 'nested',
-      };
-    }
-    if (Object.hasOwn(obj1, key) && Object.hasOwn(obj2, key)) {
-      if (obj1[key] !== obj2[key]) {
-        return {
-          name: key,
-          value1: obj1[key],
-          value2: obj2[key],
-          type: 'changed',
-        };
-      }
-      return {
-        name: key,
-        value: obj1[key],
-        type: 'unchanged',
-      };
-    }
-    if (!Object.hasOwn(obj1, key)) {
-      return {
-        name: key,
-        value: obj2[key],
+        key,
+        value: data2[key],
         type: 'added',
       };
     }
+    if (!Object.hasOwn(data2, key)) {
+      return {
+        key,
+        value: data1[key],
+        type: 'deleted',
+      };
+    }
+    if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
+      return {
+        key,
+        children: findDiff(data1[key], data2[key]),
+        type: 'nested',
+      };
+    }
+    if (Object.hasOwn(data1, key) && Object.hasOwn(data2, key)) {
+      if (!_.isEqual(data1[key], data2[key])) {
+        return {
+          key,
+          value1: data1[key],
+          value2: data2[key],
+          type: 'changed',
+        };
+      }
+    }
     return {
-      name: key,
-      value: obj1[key],
-      type: 'deleted',
+      key,
+      value: data1[key],
+      type: 'unchanged',
     };
   });
-
-  return result;
 };
 
-const makeDiffTree = (file1, file2) => ({ type: 'tree', children: findDiff(file1, file2) });
+const makeDiffTree = (data1, data2) => ({
+  type: 'root',
+  children: findDiff(data1, data2),
+});
 
 export default makeDiffTree;

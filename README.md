@@ -20,7 +20,7 @@ npm link
 ## Пример вызова
 
 ```
-gendiff -f stylish __fixtures__/file1.yml __fixtures__/file2.yaml
+gendiff -f stylish __fixtures__/file1.yml __fixtures__/file2.yml
 ```
 
 ### Поиск различий между двумя плоскими (только пары ключ-значение) JSON-файлами.

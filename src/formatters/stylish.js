@@ -2,40 +2,40 @@ import _ from 'lodash';
 
 const makeIndent = (depth, replacer = ' ', spacesCount = 4) => replacer.repeat(depth * spacesCount - 2);
 
-const getValue = (data, formatStylish, depth = 1) => {
+const stringify = (data, formatStylish, depth = 1) => {
   if (!_.isObject(data)) {
     return data;
   }
   const keys = Object.keys(data);
-  const result = keys.map((name) => {
-    const value = data[name];
-    return formatStylish({ name, value, type: 'unchanged' }, depth + 1);
+  const result = keys.map((key) => {
+    const value = data[key];
+    return formatStylish({ key, value, type: 'unchanged' }, depth + 1);
   });
   return `{\n${result.join('\n')}\n  ${makeIndent(depth)}}`;
 };
 
-const makeStylishOutput = (diffTree, depth = 0) => {
+const formatStylish = (diffTree, depth = 0) => {
   const {
-    type, name, children, value, value1, value2,
+    type, key, children, value, value1, value2,
   } = diffTree;
   switch (type) {
-    case 'tree': {
-      const result = children.map((child) => makeStylishOutput(child, depth + 1));
+    case 'root': {
+      const result = children.map((child) => formatStylish(child, depth + 1));
       return `{\n${result.join('\n')}\n}`;
     }
     case 'nested': {
-      const result = children.map((child) => makeStylishOutput(child, depth + 1));
-      return `${makeIndent(depth)}  ${name}: {\n${result.join('\n')}\n${makeIndent(depth)}  }`;
+      const result = children.map((child) => formatStylish(child, depth + 1));
+      return `${makeIndent(depth)}  ${key}: {\n${result.join('\n')}\n${makeIndent(depth)}  }`;
     }
     case 'added':
-      return `${makeIndent(depth)}+ ${name}: ${getValue(value, makeStylishOutput, depth)}`;
+      return `${makeIndent(depth)}+ ${key}: ${stringify(value, formatStylish, depth)}`;
     case 'deleted':
-      return `${makeIndent(depth)}- ${name}: ${getValue(value, makeStylishOutput, depth)}`;
+      return `${makeIndent(depth)}- ${key}: ${stringify(value, formatStylish, depth)}`;
     case 'unchanged':
-      return `${makeIndent(depth)}  ${name}: ${getValue(value, makeStylishOutput, depth)}`;
+      return `${makeIndent(depth)}  ${key}: ${stringify(value, formatStylish, depth)}`;
     case 'changed': {
-      const deleted = `${makeIndent(depth)}- ${name}: ${getValue(value1, makeStylishOutput, depth)}`;
-      const added = `${makeIndent(depth)}+ ${name}: ${getValue(value2, makeStylishOutput, depth)}`;
+      const deleted = `${makeIndent(depth)}- ${key}: ${stringify(value1, formatStylish, depth)}`;
+      const added = `${makeIndent(depth)}+ ${key}: ${stringify(value2, formatStylish, depth)}`;
       return `${deleted}\n${added}`;
     }
     default:
@@ -43,4 +43,4 @@ const makeStylishOutput = (diffTree, depth = 0) => {
   }
 };
 
-export default makeStylishOutput;
+export default formatStylish;

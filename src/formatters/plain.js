@@ -10,31 +10,31 @@ const getValue = (data) => {
   return '[complex value]';
 };
 
-const makePlainOutput = (diffTree, ancestry = '') => {
+const formatPlain = (diffTree, ancestry = '') => {
   const {
-    type, name, children, value, value1, value2,
+    type, key, children, value, value1, value2,
   } = diffTree;
   switch (type) {
-    case 'tree': {
-      const result = children.flatMap((child) => makePlainOutput(child));
-      return result.filter((key) => key !== '').join('\n');
+    case 'root': {
+      const result = children.flatMap((child) => formatPlain(child));
+      return result.filter((child) => child !== '').join('\n');
     }
     case 'nested': {
-      const result = children.flatMap((child) => makePlainOutput(child, `${ancestry}${name}.`));
-      return result.filter((key) => key !== '').join('\n');
+      const result = children.flatMap((child) => formatPlain(child, `${ancestry}${key}.`));
+      return result.filter((child) => child !== '').join('\n');
     }
     case 'added':
-      return `Property '${ancestry}${name}' was added with value: ${getValue(value)}`;
+      return `Property '${ancestry}${key}' was added with value: ${getValue(value)}`;
     case 'deleted':
-      return `Property '${ancestry}${name}' was removed`;
+      return `Property '${ancestry}${key}' was removed`;
     case 'unchanged':
       return '';
     case 'changed': {
-      return `Property '${ancestry}${name}' was updated. From ${getValue(value1)} to ${getValue(value2)}`;
+      return `Property '${ancestry}${key}' was updated. From ${getValue(value1)} to ${getValue(value2)}`;
     }
     default:
       throw new Error(`Unknown type: ${type}!`);
   }
 };
 
-export default makePlainOutput;
+export default formatPlain;
