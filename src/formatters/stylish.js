@@ -4,42 +4,38 @@ const makeIndent = (depth, replacer = ' ', spacesCount = 4) => replacer.repeat(d
 
 const stringify = (data, formatStylish, depth = 1) => {
   if (!_.isObject(data)) {
-    return data;
+    return String(data);
   }
-  const keys = Object.keys(data);
-  const result = keys.map((key) => {
-    const value = data[key];
-    return formatStylish({ key, value, type: 'unchanged' }, depth + 1);
-  });
-  return `{\n${result.join('\n')}\n  ${makeIndent(depth)}}`;
+  const output = Object.entries(data).map(([key, value]) => formatStylish({ key, value, type: 'unchanged' }, depth + 1));
+  return `{\n${output.join('\n')}\n  ${makeIndent(depth)}}`;
 };
 
-const formatStylish = (diffTree, depth = 0) => {
-  const {
-    type, key, children, value, value1, value2,
-  } = diffTree;
-  switch (type) {
+const formatStylish = (node, depth = 0) => {
+  switch (node.type) {
     case 'root': {
-      const result = children.map((child) => formatStylish(child, depth + 1));
+      const result = node.children.map((child) => formatStylish(child, depth + 1));
       return `{\n${result.join('\n')}\n}`;
     }
     case 'nested': {
-      const result = children.map((child) => formatStylish(child, depth + 1));
-      return `${makeIndent(depth)}  ${key}: {\n${result.join('\n')}\n${makeIndent(depth)}  }`;
+      const result = node.children.map((child) => formatStylish(child, depth + 1));
+      return `${makeIndent(depth)}  ${node.key}: {\n${result.join('\n')}\n${makeIndent(depth)}  }`;
     }
-    case 'added':
-      return `${makeIndent(depth)}+ ${key}: ${stringify(value, formatStylish, depth)}`;
-    case 'deleted':
-      return `${makeIndent(depth)}- ${key}: ${stringify(value, formatStylish, depth)}`;
-    case 'unchanged':
-      return `${makeIndent(depth)}  ${key}: ${stringify(value, formatStylish, depth)}`;
+    case 'added': {
+      return `${makeIndent(depth)}+ ${node.key}: ${stringify(node.value, formatStylish, depth)}`;
+    }
+    case 'deleted': {
+      return `${makeIndent(depth)}- ${node.key}: ${stringify(node.value, formatStylish, depth)}`;
+    }
+    case 'unchanged': {
+      return `${makeIndent(depth)}  ${node.key}: ${stringify(node.value, formatStylish, depth)}`;
+    }
     case 'changed': {
-      const deleted = `${makeIndent(depth)}- ${key}: ${stringify(value1, formatStylish, depth)}`;
-      const added = `${makeIndent(depth)}+ ${key}: ${stringify(value2, formatStylish, depth)}`;
+      const deleted = `${makeIndent(depth)}- ${node.key}: ${stringify(node.value1, formatStylish, depth)}`;
+      const added = `${makeIndent(depth)}+ ${node.key}: ${stringify(node.value2, formatStylish, depth)}`;
       return `${deleted}\n${added}`;
     }
     default:
-      throw new Error(`Unknown type: ${type}!`);
+      throw new Error(`Unknown type: ${node.type}!`);
   }
 };
 

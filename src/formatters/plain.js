@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const getValue = (data) => {
+const stringify = (data) => {
   if (!_.isObject(data)) {
     if (typeof data === 'string') {
       return `'${data}'`;
@@ -10,30 +10,31 @@ const getValue = (data) => {
   return '[complex value]';
 };
 
-const formatPlain = (diffTree, ancestry = '') => {
-  const {
-    type, key, children, value, value1, value2,
-  } = diffTree;
-  switch (type) {
+const getProperty = (property, key) => `${property}${key}`;
+
+const formatPlain = (node, property = '') => {
+  switch (node.type) {
     case 'root': {
-      const result = children.flatMap((child) => formatPlain(child));
-      return result.filter((child) => child !== '').join('\n');
+      const result = node.children.flatMap((child) => formatPlain(child));
+      return result.filter(Boolean).join('\n');
     }
     case 'nested': {
-      const result = children.flatMap((child) => formatPlain(child, `${ancestry}${key}.`));
+      const result = node.children.flatMap((child) => formatPlain(child, `${getProperty(property, node.key)}.`));
       return result.filter((child) => child !== '').join('\n');
     }
-    case 'added':
-      return `Property '${ancestry}${key}' was added with value: ${getValue(value)}`;
-    case 'deleted':
-      return `Property '${ancestry}${key}' was removed`;
+    case 'added': {
+      return `Property '${getProperty(property, node.key)}' was added with value: ${stringify(node.value)}`;
+    }
+    case 'deleted': {
+      return `Property '${getProperty(property, node.key)}' was removed`;
+    }
     case 'unchanged':
       return '';
     case 'changed': {
-      return `Property '${ancestry}${key}' was updated. From ${getValue(value1)} to ${getValue(value2)}`;
+      return `Property '${getProperty(property, node.key)}' was updated. From ${stringify(node.value1)} to ${stringify(node.value2)}`;
     }
     default:
-      throw new Error(`Unknown type: ${type}!`);
+      throw new Error(`Unknown type: ${node.type}!`);
   }
 };
 
